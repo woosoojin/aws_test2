@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+{% for blog in posts %} <!--하나의 page를 대상으로 돈다 -> 세개의 블로그 글이 뜬다.-->
+            <div class ="container">
+                <br>
+                <br>
+                <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">{{blog.title}}</h5>
+                          <h6 class="card-subtitle mb-2 text-muted">{{blog.pub_date}}</h6>
+                          <p class="card-text">{{blog.body}}</p>
+                          <a href="{% url 'detail' blog.id %}" class="card-link">...더보기</a>
+                        </div>
+                </div>
+            </div>
+{% endfor %}
+
+<div class="container">
+  <!--First Previous-->
+  {% if posts.has_previous %} <!--이전 페이지가 있다면 -->
+  <a href="?page=1">First</a> <!--"?page=1"라는 url로 향하는 link-->
+  <a href="?page={{posts.previous_page_number}}">Previous</a>
+  {% endif %}
+
+  <!-- ex) 3 of 4-->
+  <span>{{posts.number}}</span> <!--현재 post번호에 해당하는 숫자 반환-->
+  <span>of</span>
+  <span>{{posts.paginator.num_pages}}</span>
+  <!--span: 디자인적 요소-->
+
+  <!--Next Last-->
+  {% if posts.has_next %} <!--다음 page가 존재한다면 아래코드 실행-->
+  <!--이미 마지막 page라면 Next와 Last라는 글자가 뜨지 않을 것이다.-->
+  <a href="?page={{posts.next_page_number}}">Next</a>
+  <a href="?page={{posts.paginator.num_pages}}">Last</a>
+  <!--paginator.num_pages: 전체 page 수-->
+  {% endif %}
+</div>
+
+{% endblock %}
